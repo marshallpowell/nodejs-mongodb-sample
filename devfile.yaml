@@ -4,7 +4,7 @@ metadata:
 components:
   - name: nodejs
     container:
-      image: registry.access.redhat.com/ubi9/nodejs-20:1-59.1726696138
+      image: quay.io/rsriniva/devspaces-ubi9-nodejs:latest
       env:
       # The values below are used to set up the environment for running the application
         - name: SECRET
