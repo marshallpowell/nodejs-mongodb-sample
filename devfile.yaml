@@ -4,7 +4,7 @@ metadata:
 components:
   - name: nodejs
     container:
-      image: quay.io/devfile/universal-developer-image:ubi8-latest
+      image: registry.access.redhat.com/ubi9/nodejs-20:1-59.1726696138
       env:
       # The values below are used to set up the environment for running the application
         - name: SECRET
