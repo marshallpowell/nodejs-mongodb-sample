@@ -29,13 +29,13 @@ components:
       size: 1G
   - name: mongo
     container:
-      image: registry.redhat.io/rhscl/mongodb-36-rhel7:1-50
+      image: docker.io/mongodb/mongodb-community-server:7.0-ubi9
       env:
         - name: MONGODB_USER
           value: user
         - name: MONGODB_PASSWORD
           value: password
-        - name: MONGODB_DATABASE
+        - name: MONGODB_DB
           value: guestbook
         - name: MONGODB_ADMIN_PASSWORD
           value: password
