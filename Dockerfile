@@ -1,18 +1,27 @@
-# Use base node image
-FROM quay.io/eclipse/che-nodejs10-ubi:nightly
+FROM registry.access.redhat.com/ubi9/ubi:9.4-1214.1729773476
 
-RUN mkdir /home/nodejs-mongodb-sample
-WORKDIR /home/nodejs-mongodb-sample
+ARG USER_HOME_DIR="/home/user"
+ARG WORK_DIR="/projects"
 
-# Copy package.json and install dependencies
-COPY package*.json ./
-RUN npm install
+# Set SHELL to configure the default shell used in web terminals
+# https://github.com/eclipse/che/issues/22524
+ENV SHELL=/usr/bin/bash
 
-# Copy rest of the application source code
-COPY . .
+# Set HOME. Required for CRI-o to set /etc/passwd correctly and in general for other CLI tools
+ENV HOME=${USER_HOME_DIR}
+ENV BUILDAH_ISOLATION=chroot
 
-# Run app.js with debugging port when container launches
-ENTRYPOINT ["npm", "run-script", "debug"]
+COPY --chown=0:0 entrypoint.sh /
 
-# Comment above and uncomment below to run app.js without debugger port when container launches
-# ENTRYPOINT ["npm", "start"]
+RUN dnf --disableplugin=subscription-manager install -y openssl compat-openssl11 libbrotli nodejs; \
+    dnf update -y ; \
+    dnf clean all ; \
+    mkdir -p ${USER_HOME_DIR} ; \
+    mkdir -p ${WORK_DIR} ; \
+    chgrp -R 0 /home ; \
+    chmod +x /entrypoint.sh ; \
+    chmod -R g=u /etc/passwd /etc/group /home ${WORK_DIR}
+
+WORKDIR ${WORK_DIR}
+ENTRYPOINT [ "/entrypoint.sh" ]
+CMD [ "tail", "-f", "/dev/null" ]
