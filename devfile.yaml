@@ -4,7 +4,7 @@ metadata:
 components:
   - name: nodejs
     container:
-      image: quay.io/rsriniva/devspaces-ubi9-nodejs:latest
+      image: quay.io/mpowell/devspaces-ubi9-nodejs:latest
       env:
       # The values below are used to set up the environment for running the application
         - name: SECRET
